@@ -55,32 +55,61 @@ get_header();
 					<p><?php echo  $section1Content ?></p>
 				</div>
 			</div>
+			<?php
+
+				/* Start the Loop */
+				while ( have_posts() ) :
+					the_post();
+
+					// For each post with category event , get the title, content and featured image
+					if ( has_category( 'events' ) ) {
+						// use by alternance content h2 first or image first
+						if ( $i % 2 ) {
+							?>
+							<div class="section image-left">
+								<div class="image-container" style="background-image: url('<?php echo esc_url( get_the_post_thumbnail_url() ); ?>');"></div>
+								<div class="content-container">
+									<h2><?php the_title(); ?></h2>
+									<p><?php the_content(); ?></p>
+								</div>
+							</div>
+							<?php
+						} else {
+							?>
+							<div class="section image-left">
+								<div class="content-container">
+									<h2><?php the_title(); ?></h2>
+									<p><?php the_content(); ?></p>
+								</div>
+								<div class="image-container" style="background-image: url('<?php echo esc_url( get_the_post_thumbnail_url() ); ?>');"></div>
+							</div>
+							<?php
+						}
+						$i++;
+
+						
+					}
+				endwhile;
+
+				the_posts_navigation();
+
+
+			$section2 = get_page_by_path( 'section-2' );
+			$section2Title = $section2->post_title;
+			$section2Content = $section2->post_content;
+			$section2FeaturedImage = get_the_post_thumbnail_url( $section2->ID, 'full' );
+			?>
 			<div class="section image-left">
 				<div class="content-container">
-					<h2><?php echo esc_html( $section1Title ); ?></h2>
-					<p><?php echo  $section1Content ?></p>
+					<h2><?php echo esc_html( $section2Title ); ?></h2>
+					<p><?php echo  $section2Content ?></p>
 				</div>
-				<div class="image-container" style="background-image: url('<?php echo esc_url( $section1FeaturedImage ); ?>');"></div>
+				<div class="image-container" style="background-image: url('<?php echo esc_url( $section2FeaturedImage ); ?>');"></div>
 			</div>
 
 			<?php
 
 
-
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
-
-				/*
-				 * Include the Post-Type-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_type() );
-
-			endwhile;
-
-			the_posts_navigation();
 
 		else :
 
